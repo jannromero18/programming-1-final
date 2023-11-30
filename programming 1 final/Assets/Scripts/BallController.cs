@@ -5,10 +5,13 @@ using UnityEngine;
 public class BallController : MonoBehaviour
 {
     [SerializeField] private float speed;
+
+    public static int score = 0;
     
     private Rigidbody rb;
 
     private Vector3 _moveDirection;
+    private bool isGrounded;
 
     //private int movement = 0;
     //no movement = 0
@@ -18,6 +21,8 @@ public class BallController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("Left Click to start. WASD movement");
+
         InputManager.Init(this); //puts the game controls on the ball
         InputManager.SetStartControls();
 
@@ -26,7 +31,17 @@ public class BallController : MonoBehaviour
     }
 
     void FixedUpdate(){
-        transform.position += speed * Time.deltaTime * _moveDirection;
+        Debug.Log("Score: " + score);
+       
+        CheckGround();
+        
+        if(!isGrounded){
+            Debug.Log("Game Over");
+        }
+        else{
+          
+            transform.position += speed * Time.deltaTime * _moveDirection;
+        }
 
         /* WAS NOT MOVING IN THE CORRECT DIRECTIONS
         if (movement == 1){
@@ -56,5 +71,10 @@ public class BallController : MonoBehaviour
 
      public void SetMovementDirection(Vector3 currentDirection){
         _moveDirection = currentDirection;
+    }
+
+    private void CheckGround(){
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, GetComponent<Collider>().bounds.size.y);
+        Debug.DrawRay(transform.position, Vector3.down * GetComponent<Collider>().bounds.size.y, Color.green, 0, false);
     }
 }

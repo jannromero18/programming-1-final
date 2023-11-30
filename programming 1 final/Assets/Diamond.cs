@@ -7,6 +7,7 @@ public class Diamond : MonoBehaviour
     private void OnTriggerEnter(Collider other){ //box collider isTrigger 
         if(other.transform.tag == "Ball"){
             Destroy(gameObject); 
+            BallController.score++;
         }
     }
 }
